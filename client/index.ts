@@ -7,14 +7,20 @@ const trpc = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
       url: "http://localhost:3001",
+
+      async headers() {
+        return {
+          Authorization: "Bearer 1",
+        };
+      },
     }),
   ],
 });
 
 async function main() {
-  let response = await trpc.signUp.mutate({
-    username: "ankit",
-    password: "123456",
+  let response = await trpc.createTodo.mutate({
+    title: "ankit",
+    description: "do ankit",
   });
 
   console.log(response);

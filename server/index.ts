@@ -8,16 +8,13 @@ const todoInputType = z.object({
 });
 
 const appRouter = router({
-  createTodo: publicProcedure
-    .input(todoInputType)
-    .mutation(async (opts: { input: z.infer<typeof todoInputType> }) => {
-      const title = opts.input.title;
-      const description = opts.input.description;
+  createTodo: publicProcedure.input(todoInputType).mutation(async (opts) => {
+    console.log(opts.ctx.username);
 
-      return {
-        id: "1",
-      };
-    }),
+    return {
+      id: "1",
+    };
+  }),
   signUp: publicProcedure
     .input(
       z.object({
@@ -26,6 +23,9 @@ const appRouter = router({
       })
     )
     .mutation(async (opts) => {
+      //context
+      //   const username = opts.ctx.username;
+      //   console.log(username);
       let username = opts.input.username;
       let password = opts.input.password;
 
@@ -39,6 +39,13 @@ const appRouter = router({
 
 const server = createHTTPServer({
   router: appRouter,
+  createContext(opts) {
+    let authHeader = opts.req.headers["authorization"];
+    console.log(authHeader);
+    return {
+      username: "123",
+    };
+  },
 });
 
 server.listen(3001);

@@ -17,14 +17,21 @@ const trpc = (0, client_1.createTRPCClient)({
     links: [
         (0, client_1.httpBatchLink)({
             url: "http://localhost:3001",
+            headers() {
+                return __awaiter(this, void 0, void 0, function* () {
+                    return {
+                        Authorization: "Bearer 1",
+                    };
+                });
+            },
         }),
     ],
 });
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        let response = yield trpc.signUp.mutate({
-            username: "ankit",
-            password: "123456",
+        let response = yield trpc.createTodo.mutate({
+            title: "ankit",
+            description: "do ankit",
         });
         console.log(response);
     });

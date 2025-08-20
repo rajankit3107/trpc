@@ -17,11 +17,8 @@ const todoInputType = zod_1.z.object({
     description: zod_1.z.string(),
 });
 const appRouter = (0, trpc_1.router)({
-    createTodo: trpc_1.publicProcedure
-        .input(todoInputType)
-        .mutation((opts) => __awaiter(void 0, void 0, void 0, function* () {
-        const title = opts.input.title;
-        const description = opts.input.description;
+    createTodo: trpc_1.publicProcedure.input(todoInputType).mutation((opts) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(opts.ctx.username);
         return {
             id: "1",
         };
@@ -32,6 +29,9 @@ const appRouter = (0, trpc_1.router)({
         password: zod_1.z.string(),
     }))
         .mutation((opts) => __awaiter(void 0, void 0, void 0, function* () {
+        //context
+        //   const username = opts.ctx.username;
+        //   console.log(username);
         let username = opts.input.username;
         let password = opts.input.password;
         let token = "`213131314e3";
@@ -42,5 +42,12 @@ const appRouter = (0, trpc_1.router)({
 });
 const server = (0, standalone_1.createHTTPServer)({
     router: appRouter,
+    createContext(opts) {
+        let authHeader = opts.req.headers["authorization"];
+        console.log(authHeader);
+        return {
+            username: "123",
+        };
+    },
 });
 server.listen(3001);
